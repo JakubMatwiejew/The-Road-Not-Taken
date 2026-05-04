@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FashionHero – Jak wygląda na klientkach?</title>
+<link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&family=Neue+Haas+Grotesk+Display+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #e8e4de;
+    --surface:  #f2efea;
+    --white:    #ffffff;
+    --border:   #d4cfc8;
+    --border-dark: #b8b2aa;
+    --text:     #1a1814;
+    --text-mid: #6b6560;
+    --text-muted: #9e9890;
+    --accent:   #1a1814;
+    --green:    #2d6a4a;
+    --green-bg: #eaf3ee;
+    --red:      #8b2a2a;
+    --red-bg:   #f5eaea;
+    --btn-bg:   #c8c3bb;
+    --btn-hover:#b8b2aa;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    background: var(--text);
+    color: var(--bg);
+    text-align: center;
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    font-weight: 300;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    height: 56px;
+    gap: 32px;
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-right: 16px;
+  }
+  .nav-link {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    text-decoration: none;
+    font-weight: 400;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .nav-icons svg { cursor: pointer; }
+
+  /* ─── BREADCRUMB ─── */
+  .breadcrumb {
+    padding: 14px 40px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb span { color: var(--text); }
+
+  /* ─── PRODUCT LAYOUT ─── */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+
+  /* left: images */
+  .product-images { padding-right: 40px; }
+  .main-image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .main-image img { width: 100%; height: 100%; object-fit: cover; }
+  .thumbs { display: flex; gap: 8px; }
+  .thumb {
+    width: 72px; aspect-ratio: 3/4;
+    background: var(--surface);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .thumb.active { border-color: var(--text); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* right: info */
+  .product-info { padding-top: 4px; }
+  .sold-by { font-size: 11px; color: var(--text-mid); margin-bottom: 6px; }
+  .sold-by a { color: var(--text-mid); }
+  .product-title { font-size: 26px; font-weight: 400; letter-spacing: -0.01em; margin-bottom: 10px; line-height: 1.2; }
+  .stars-row { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; }
+  .stars { color: var(--text); font-size: 13px; letter-spacing: 1px; }
+  .stars-count { font-size: 12px; color: var(--text-mid); }
+  .price { font-size: 20px; font-weight: 400; margin-bottom: 14px; }
+  .stock { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); margin-bottom: 20px; }
+  .stock-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* color swatches */
+  .option-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 8px; }
+  .swatches { display: flex; gap: 8px; margin-bottom: 6px; }
+  .swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+  .swatch.active { border-color: var(--text); outline: 2px solid var(--bg); outline-offset: -4px; }
+  .swatch-name { font-size: 12px; color: var(--text-mid); margin-bottom: 20px; }
+
+  /* size tabs */
+  .size-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .size-tab {
+    font-size: 12px; letter-spacing: 0.04em;
+    padding: 8px 16px 9px;
+    cursor: pointer; color: var(--text-mid);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-weight: 400;
+  }
+  .size-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+  .size-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .size-btn {
+    width: 56px; height: 44px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    border-radius: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 300;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .size-btn:hover { border-color: var(--text); }
+  .size-btn.active { border-color: var(--text); background: var(--white); }
+
+  .btn-add {
+    width: 100%; padding: 15px;
+    background: var(--btn-bg);
+    border: none; border-radius: 40px;
+    font-family: inherit;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text); cursor: pointer;
+    transition: background 0.15s;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+  .btn-add:hover { background: var(--btn-hover); }
+  .btn-add.selected { background: var(--text); color: var(--bg); }
+
+  .shipping-info { border-top: 1px solid var(--border); padding-top: 14px; }
+  .shipping-line { font-size: 12px; color: var(--text-mid); margin-bottom: 4px; }
+
+  /* ─── UGC SECTION ─── */
+  .ugc-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    border-top: 1px solid var(--border);
+    padding-top: 48px;
+  }
+
+  .ugc-heading {
+    font-size: 20px; font-weight: 400; letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .ugc-subheading {
+    font-size: 13px; color: var(--text-mid);
+    margin-bottom: 28px;
+  }
+
+  /* filter row */
+  .ugc-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 12px; letter-spacing: 0.04em;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 300;
+  }
+  .filter-btn:hover { border-color: var(--text); color: var(--text); }
+  .filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* photo grid */
+  .ugc-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .ugc-card {
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .ugc-photo {
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.15s;
+  }
+  .ugc-card:hover .ugc-photo { opacity: 0.88; }
+  .ugc-photo-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(24,20,16,0.5));
+    padding: 20px 10px 8px;
+  }
+  .ugc-size-tag {
+    font-size: 10px; color: rgba(255,255,255,0.9);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .ugc-meta {
+    padding: 8px 0 0;
+    font-size: 11px; color: var(--text-mid);
+    line-height: 1.4;
+  }
+  .ugc-name { font-weight: 400; color: var(--text); margin-bottom: 1px; }
+
+  /* add card */
+  .ugc-add-card {
+    aspect-ratio: 3/4;
+    border: 1px dashed var(--border-dark);
+    border-radius: 2px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    background: transparent;
+  }
+  .ugc-add-card:hover { border-color: var(--text); }
+  .add-plus {
+    width: 32px; height: 32px;
+    border: 1px solid var(--border-dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: var(--text-mid);
+    line-height: 1;
+  }
+  .add-label { font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.4; padding: 0 12px; }
+
+  /* incentive strip */
+  .incentive-strip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .incentive-icon {
+    width: 36px; height: 36px;
+    background: var(--text);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .incentive-text strong { font-weight: 500; display: block; font-size: 13px; margin-bottom: 2px; }
+  .incentive-text span { font-size: 12px; color: var(--text-mid); }
+  .incentive-btn {
+    margin-left: auto;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--border-dark);
+    border-radius: 40px;
+    font-family: inherit;
+    font-size: 12px; letter-spacing: 0.04em;
+    cursor: pointer; color: var(--text);
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-weight: 300;
+  }
+  .incentive-btn:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* impact cards */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 0;
+  }
+  .impact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px;
+  }
+  .impact-val {
+    font-size: 28px; font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .impact-val.pos { color: var(--green); }
+  .impact-val.neg { color: var(--red); }
+  .impact-label { font-size: 11px; color: var(--text-mid); letter-spacing: 0.03em; margin-bottom: 8px; }
+  .impact-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+
+  /* prototype badge */
+  .proto-badge {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 40px;
+    z-index: 300;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-bg {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(24,20,16,0.6);
+    z-index: 400;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--bg);
+    width: 100%; max-width: 560px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 2px;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-title { font-size: 16px; font-weight: 400; }
+  .modal-close {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px; color: var(--text-mid);
+    border: none; background: transparent;
+    font-family: inherit;
+  }
+  .modal-body { padding: 20px 24px 28px; }
+  .review-item {
+    display: flex; gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .review-item:last-of-type { border-bottom: none; }
+  .review-photo {
+    width: 64px; height: 86px;
+    background: var(--surface);
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .review-content { flex: 1; }
+  .review-name-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+  .review-name { font-size: 13px; font-weight: 400; }
+  .review-size { font-size: 11px; color: var(--text-muted); }
+  .review-stars { color: var(--text); font-size: 11px; letter-spacing: 1px; margin-bottom: 5px; }
+  .review-text { font-size: 12px; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
+  .review-date { font-size: 10px; color: var(--text-muted); margin-top: 5px; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; gap: 20px; }
+    .product-layout { grid-template-columns: 1fr; padding: 0 20px 40px; }
+    .product-images { padding-right: 0; margin-bottom: 32px; }
+    .ugc-section { padding: 32px 20px 60px; }
+    .ugc-grid { grid-template-columns: repeat(3, 1fr); }
+    .impact-grid { grid-template-columns: repeat(2, 1fr); }
+    .breadcrumb { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">Free Shipping on Orders over 299 zł · Easy Returns.</div>
+
+<nav>
+  <span class="nav-logo">FashionHero</span>
+  <a class="nav-link" href="#">Men</a>
+  <a class="nav-link" href="#">Women</a>
+  <a class="nav-link" href="#">Sale</a>
+  <a class="nav-link" href="#">New</a>
+  <div class="nav-icons">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="#">Home</a> / <a href="#">Women</a> / <span>Sukienka midi w kwiaty</span>
+</div>
+
+<div class="product-layout">
+  <!-- images -->
+  <div class="product-images">
+    <div class="main-image">
+      <svg width="130" height="200" viewBox="0 0 130 200" opacity="0.18">
+        <ellipse cx="65" cy="24" rx="26" ry="26" fill="#1a1814"/>
+        <path d="M30 60 Q65 44 100 60 L118 190 Q65 206 12 190 Z" fill="#1a1814"/>
+        <path d="M30 60 L14 100 Q22 106 32 100" fill="#14100c"/>
+        <path d="M100 60 L116 100 Q108 106 98 100" fill="#14100c"/>
+      </svg>
+    </div>
+    <div class="thumbs">
+      <div class="thumb active">
+        <svg width="30" height="50" viewBox="0 0 30 50" opacity="0.22">
+          <ellipse cx="15" cy="6" rx="7" ry="7" fill="#1a1814"/>
+          <path d="M5 16 Q15 10 25 16 L28 48 Q15 52 2 48Z" fill="#1a1814"/>
+        </svg>
+      </div>
+      <div class="thumb">
+        <svg width="30" height="50" viewBox="0 0 30 50" opacity="0.14">
+          <ellipse cx="15" cy="6" rx="7" ry="7" fill="#1a1814"/>
+          <path d="M3 16 Q15 10 27 16 L28 48 Q15 52 2 48Z" fill="#1a1814"/>
+        </svg>
+      </div>
+      <div class="thumb">
+        <svg width="30" height="50" viewBox="0 0 30 50" opacity="0.10">
+          <ellipse cx="15" cy="6" rx="7" ry="7" fill="#1a1814"/>
+          <path d="M4 16 Q15 11 26 16 L27 47 Q15 51 3 47Z" fill="#1a1814"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- info -->
+  <div class="product-info">
+    <div class="sold-by">Sold by <a href="#">Reserved</a></div>
+    <h1 class="product-title">Sukienka midi<br>w kwiaty</h1>
+    <div class="stars-row">
+      <span class="stars">★★★★☆</span>
+      <span class="stars-count">(28)</span>
+    </div>
+    <div class="price">189 zł</div>
+    <div class="stock"><div class="stock-dot"></div> In Stock — Ready to Ship</div>
+
+    <div class="option-label">Kolor</div>
+    <div class="swatches">
+      <div class="swatch active" style="background:#e8d5c0;" title="Ecru"></div>
+      <div class="swatch" style="background:#2d3561;" title="Granat"></div>
+      <div class="swatch" style="background:#c8553d;" title="Ceglasty"></div>
+    </div>
+    <div class="swatch-name">Ecru</div>
+
+    <div class="size-tabs">
+      <div class="size-tab active" onclick="setTab(this, 'women')">Women's sizes</div>
+      <div class="size-tab" onclick="setTab(this, 'men')">Men's sizes</div>
+    </div>
+    <div class="size-grid" id="size-grid">
+      <button class="size-btn" onclick="selectSize(this)">XS</button>
+      <button class="size-btn active" onclick="selectSize(this)">S</button>
+      <button class="size-btn" onclick="selectSize(this)">M</button>
+      <button class="size-btn" onclick="selectSize(this)">L</button>
+      <button class="size-btn" onclick="selectSize(this)">XL</button>
+    </div>
+
+    <button class="btn-add selected" id="add-btn">Add to Cart</button>
+
+    <div class="shipping-info">
+      <div class="shipping-line">Free Shipping on Orders over 299 zł</div>
+      <div class="shipping-line">Estimated delivery: May 9 – May 11</div>
+      <div class="shipping-line">Easy Returns</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── UGC SECTION ── -->
+<div class="ugc-section">
+  <h2 class="ugc-heading">Jak wygląda na klientkach</h2>
+  <p class="ugc-subheading">Zdjęcia dodane przez kupujące · filtruj po swoim rozmiarze</p>
+
+  <div class="ugc-filters">
+    <button class="filter-btn active" onclick="setFilter(this)">Wszystkie (8)</button>
+    <button class="filter-btn" onclick="setFilter(this)">XS – S (3)</button>
+    <button class="filter-btn" onclick="setFilter(this)">M – L (4)</button>
+    <button class="filter-btn" onclick="setFilter(this)">XL+ (1)</button>
+  </div>
+
+  <div class="ugc-grid">
+    <!-- 5 photo cards -->
+    <div class="ugc-card" onclick="openModal()">
+      <div class="ugc-photo" style="background:#ddd8d0;">
+        <svg width="52" height="88" viewBox="0 0 52 88" opacity="0.22">
+          <ellipse cx="26" cy="12" rx="12" ry="12" fill="#1a1814"/>
+          <path d="M8 30 Q26 20 44 30 L50 84 Q26 92 2 84Z" fill="#1a1814"/>
+        </svg>
+        <div class="ugc-photo-overlay">
+          <div class="ugc-size-tag">Rozmiar S<br>160 cm</div>
+        </div>
+      </div>
+      <div class="ugc-meta">
+        <div class="ugc-name">Zosia P.</div>
+        ★★★★★ · 3 dni temu
+      </div>
+    </div>
+
+    <div class="ugc-card" onclick="openModal()">
+      <div class="ugc-photo" style="background:#cec8c0;">
+        <svg width="56" height="88" viewBox="0 0 56 88" opacity="0.22">
+          <ellipse cx="28" cy="12" rx="13" ry="12" fill="#1a1814"/>
+          <path d="M6 30 Q28 18 50 30 L54 84 Q28 92 2 84Z" fill="#1a1814"/>
+        </svg>
+        <div class="ugc-photo-overlay">
+          <div class="ugc-size-tag">Rozmiar M<br>168 cm</div>
+        </div>
+      </div>
+      <div class="ugc-meta">
+        <div class="ugc-name">Agnieszka K.</div>
+        ★★★★★ · tydzień temu
+      </div>
+    </div>
+
+    <div class="ugc-card" onclick="openModal()">
+      <div class="ugc-photo" style="background:#e0dbd4;">
+        <svg width="60" height="88" viewBox="0 0 60 88" opacity="0.22">
+          <ellipse cx="30" cy="12" rx="14" ry="12" fill="#1a1814"/>
+          <path d="M4 30 Q30 16 56 30 L58 84 Q30 92 2 84Z" fill="#1a1814"/>
+        </svg>
+        <div class="ugc-photo-overlay">
+          <div class="ugc-size-tag">Rozmiar L<br>172 cm</div>
+        </div>
+      </div>
+      <div class="ugc-meta">
+        <div class="ugc-name">Marta W.</div>
+        ★★★★☆ · 2 tygodnie temu
+      </div>
+    </div>
+
+    <div class="ugc-card" onclick="openModal()">
+      <div class="ugc-photo" style="background:#d4cec6;">
+        <svg width="50" height="84" viewBox="0 0 50 84" opacity="0.22">
+          <ellipse cx="25" cy="12" rx="11" ry="12" fill="#1a1814"/>
+          <path d="M6 28 Q25 18 44 28 L48 80 Q25 88 2 80Z" fill="#1a1814"/>
+        </svg>
+        <div class="ugc-photo-overlay">
+          <div class="ugc-size-tag">Rozmiar S<br>163 cm</div>
+        </div>
+      </div>
+      <div class="ugc-meta">
+        <div class="ugc-name">Kasia R.</div>
+        ★★★★★ · 3 tygodnie temu
+      </div>
+    </div>
+
+    <div class="ugc-card" onclick="openModal()">
+      <div class="ugc-photo" style="background:#e4e0d8;">
+        <svg width="64" height="88" viewBox="0 0 64 88" opacity="0.22">
+          <ellipse cx="32" cy="12" rx="15" ry="12" fill="#1a1814"/>
+          <path d="M4 30 Q32 16 60 30 L62 84 Q32 92 2 84Z" fill="#1a1814"/>
+        </svg>
+        <div class="ugc-photo-overlay">
+          <div class="ugc-size-tag">Rozmiar XL<br>170 cm</div>
+        </div>
+      </div>
+      <div class="ugc-meta">
+        <div class="ugc-name">Ania M.</div>
+        ★★★★☆ · miesiąc temu
+      </div>
+    </div>
+
+    <!-- add card -->
+    <div style="display:contents;">
+      <div>
+        <div class="ugc-add-card" onclick="openModal()">
+          <div class="add-plus">+</div>
+          <div class="add-label">Dodaj swoje zdjęcie</div>
+        </div>
+        <div class="ugc-meta" style="color:transparent;">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- incentive -->
+  <div class="incentive-strip">
+    <div class="incentive-icon">
+      <svg width="16" height="16" fill="none" stroke="#e8e4de" stroke-width="1.5" viewBox="0 0 24 24">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    </div>
+    <div class="incentive-text">
+      <strong>Dodaj zdjęcie, zyskaj 15 zł zniżki</strong>
+      <span>Twoje zdjęcie pomaga innym kupującym wybrać właściwy rozmiar</span>
+    </div>
+    <button class="incentive-btn" onclick="openModal()">Dodaj zdjęcie →</button>
+  </div>
+
+  <!-- impact row -->
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-val neg">38%</div>
+      <div class="impact-label">Obecny return rate</div>
+      <div class="impact-desc">Koszt zwrotów: ~1,7 mln PLN/mies. Główna przyczyna: produkt wygląda inaczej niż oczekiwano.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-val pos">−3 pp</div>
+      <div class="impact-label">Cel redukcji return rate</div>
+      <div class="impact-desc">Redukcja do 35% = ~510K PLN/mies oszczędności. Mierzone A/B testem na produktach z UGC vs bez.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-val pos">+10%</div>
+      <div class="impact-label">Spodziewany wzrost konwersji</div>
+      <div class="impact-desc">Więcej kontekstu wizualnego = mniej porzuconych koszyków. Segment kupujących premium zwraca rzadziej.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-val" style="font-size:20px; padding-top:4px;">Cold start</div>
+      <div class="impact-label">Główne ryzyko</div>
+      <div class="impact-desc">Ola próbowała w 2025 – 3 zdjęcia na 1000 osób. Tym razem: incentive 15 zł + influencerki jako seed content.</div>
+    </div>
+  </div>
+</div>
+
+<div class="proto-badge">Prototyp · FashionHero 2026</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Zdjęcia klientek · Sukienka midi w kwiaty</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="review-item">
+        <div class="review-photo">
+          <svg width="32" height="54" viewBox="0 0 32 54" opacity="0.2">
+            <ellipse cx="16" cy="8" rx="8" ry="8" fill="#1a1814"/>
+            <path d="M4 20 Q16 14 28 20 L30 52 Q16 56 2 52Z" fill="#1a1814"/>
+          </svg>
+        </div>
+        <div class="review-content">
+          <div class="review-name-row">
+            <span class="review-name">Zosia P.</span>
+            <span class="review-size">Rozmiar S · 160 cm</span>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">Zamawiałam swój rozmiar i pasuje idealnie. Materiał przyjemny, nie prześwituje. Kolor żywy, ładnie wygląda na zdjęciach. Dół sukienki sięga za kostkę — bardzo elegancko.</div>
+          <div class="review-date">3 dni temu</div>
+        </div>
+      </div>
+
+      <div class="review-item">
+        <div class="review-photo">
+          <svg width="36" height="54" viewBox="0 0 36 54" opacity="0.2">
+            <ellipse cx="18" cy="8" rx="9" ry="8" fill="#1a1814"/>
+            <path d="M3 20 Q18 13 33 20 L35 52 Q18 56 1 52Z" fill="#1a1814"/>
+          </svg>
+        </div>
+        <div class="review-content">
+          <div class="review-name-row">
+            <span class="review-name">Agnieszka K.</span>
+            <span class="review-size">Rozmiar M · 168 cm</span>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">Wzięłam swój rozmiar i pasuje świetnie. Materiał lniany, więc lekko się gniecie — ale to urok. Polecam zamówić rozmiar mniejszy jeśli lubisz dopasowane kroje.</div>
+          <div class="review-date">tydzień temu</div>
+        </div>
+      </div>
+
+      <div class="review-item">
+        <div class="review-photo">
+          <svg width="40" height="54" viewBox="0 0 40 54" opacity="0.2">
+            <ellipse cx="20" cy="8" rx="10" ry="8" fill="#1a1814"/>
+            <path d="M2 20 Q20 12 38 20 L39 52 Q20 56 1 52Z" fill="#1a1814"/>
+          </svg>
+        </div>
+        <div class="review-content">
+          <div class="review-name-row">
+            <span class="review-name">Marta W.</span>
+            <span class="review-size">Rozmiar L · 172 cm</span>
+          </div>
+          <div class="review-stars">★★★★☆</div>
+          <div class="review-text">Wzięłam L zamiast M i nie żałuję — luźniejszy krój lepiej mi leży. Sukienka dłuższa niż myślałam, ale na mój wzrost to akurat dobrze. Jedyna uwaga: rozporek z tyłu trochę się otwiera przy chodzeniu.</div>
+          <div class="review-date">2 tygodnie temu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function setFilter(el) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function setTab(el, type) {
+    document.querySelectorAll('.size-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const grid = document.getElementById('size-grid');
+    grid.innerHTML = type === 'women'
+      ? ['XS','S','M','L','XL'].map((s,i) => `<button class="size-btn${i===1?' active':''}" onclick="selectSize(this)">${s}</button>`).join('')
+      : ['1','2','3','4'].map((s,i) => `<button class="size-btn${i===1?' active':''}" onclick="selectSize(this)">${s}</button>`).join('');
+  }
+  function selectSize(el) {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
